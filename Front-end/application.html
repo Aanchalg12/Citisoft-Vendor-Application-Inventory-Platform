@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{%block title %}Applications{% endblock %}
+{% block content %}
+{% load static %}
+{% comment %} <form action="{% url 'addapplication' %}">
+  <button class="top-right-button" type="submit">Add Application</button>
+</form> {% endcomment %}
+
+<h3 align="center">Approved Applications</h3>
+{% comment %} <div class="container">
+  <div class="product-container">
+      <div class="product-item">
+         
+          <a href="">
+              <img src="{% static 'photo\images\photo.jpeg' %}" alt="Product 1">
+          </a>
+      </div>
+      <div class="product-item">
+          <a href="">
+              <img src="{% static 'photo\images\product.png' %}" alt="Product 2">
+          </a>
+      </div>
+      <div class="product-item">
+          <a href="">
+              <img src="{% static 'photo\images\freyda.png' %}" alt="Product 3">
+          </a>
+      </div>
+  </div>
+</div> {% endcomment %}
+
+<h3 align="center">Pending Applications</h3>
+
+<h3 align="center">Rejected Applications</h3>
+
+
+</main>
+{% endblock %}

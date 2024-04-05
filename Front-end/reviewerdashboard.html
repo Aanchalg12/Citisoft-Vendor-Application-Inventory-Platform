@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{%block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="card-deck">
+    <div class="col">
+      <div class="col-md-5" style="width: 18rem;>
+        {% comment %} <div class="card text-center text-white  mb-3" id="total-users">
+            <div class="card-header">
+              <h5 class="card-title">Total number of Users</h5>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{total_users}}</h3>
+            </div>
+        </div> {% endcomment %}
+       
+   
+      <div class="col-md-5" style="width: 18rem;>
+        <div class="card text-center text-white  mb-3" id="total-applications">
+            <div class="card-header">
+              <h5 class="card-title">Total number of Pending Applications</h5>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">{{total_applications}}</h3>
+            </div>
+        </div>
+      </div>
+     </div>
+   
+    </div>
+{% endblock %}

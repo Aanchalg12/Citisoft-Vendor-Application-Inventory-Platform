@@ -1,0 +1,68 @@
+{% load static %}
+<header>
+<nav>
+  <div class="navbar">
+      <div class="navbar-left">
+        <h1>CitiSoft </h1>
+      </div>
+      <div class="navbar-center">
+        <form action="{% url 'search_users' %}" method="GET" class="search-form">
+          <input type="text" name="query" placeholder="Search users...">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div class="navbar-right">
+          <div class="dropdown">
+              <button class="dropbtn">
+                  {% comment %} <img src="{% static '\images\photo.jpeg' %}"  alt="Profile Picture" class="profile-pic"> {% endcomment %}
+                  {% if request.user.is_authenticated %}
+                      {% if request.user.profile_photo %}
+                         <img src="{{ request.user.profile_photo.url }}" alt="Profile Picture" class="profile-pic" >
+                      {% else %}
+                                       <!-- Default profile picture -->
+                          <img src="{% static '\images\Default_pic.jpg' %}"  alt="Default Picture" class="profile-pic">
+                     {% endif %}
+                  {% endif %}
+                  {{ user.username }}
+                  <i class="fa fa-caret-down"></i>
+              </button>
+              <div class="dropdown-content">
+                  <a href="{% url 'userprofile' %}">Settings</a>
+                  <a href="{% url 'logout' %}">Logout</a>
+              </div>
+          </div>
+      </div>
+  </div>
+</nav>
+  </div>
+</header>    
+ <!--<header>
+    <div class="container">
+        <div class="logo">Citisoft</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search something..">
+        </div>
+        <div class="user-profile">
+            <img src="{% static '\images\photo.jpeg' %}" alt="Profile Image">
+            {{ user.username }}
+            <i class="fa fa-caret-down"></i>
+            <div class="dropdown">
+              <div class="dropdown-content">
+                <a href="{% url 'userprofile' %}">Settings</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+            </div>
+        </div>
+    </div>
+</header>           -->                 
+     <div class="dashboard-container">
+        <nav>
+          <ul>
+            <li><a href="/dashboard"><i class="fa-solid fa-gauge"></i>Dashboard</a></li>
+            <li><a href="/user_list"><i class="fa-solid fa-user"></i>Users</a></li>
+            <li><a href="/application"><i class="fa-brands fa-product-hunt"></i>Applications</a></li>
+            <li><a href="/userprofile"><i class="fa-solid fa-id-card-clip"></i>User Profile</a></li>
+            <li><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</a></li>
+          </ul>
+        </nav>    
+    </div>

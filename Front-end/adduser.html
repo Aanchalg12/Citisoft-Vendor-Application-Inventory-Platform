@@ -1,0 +1,59 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block title %}Add User{% endblock %}
+<link rel="stylesheet" href="{% static "css/adduser.css" %}">
+{% block content %}
+<h2 align="center">Add User</h2>
+{% if success_message %}
+        <div style="color: green;">{{ success_message }}</div>
+    {% endif %}
+<div class="content">
+  {{m}}
+<form method="post" enctype="multipart/form-data" action="{% url 'saveadduser' %}">
+    {% csrf_token %}
+    <div>
+      <label for="id_username">Username:</label>
+      <input type="text" id="id_username" name="username">
+    </div>
+    <div>
+      <label for="id_email">Email:</label>
+      <input type="email" name="email" id="id_email" required>
+    </div>
+    <div>
+      <label for="id_password">Password:</label>
+      <input type="password" id="id_password" name="password">
+    </div>
+    <div>
+      <label for="id_phone_number">Phone Number:</label>
+      <input type="text" name="phone_number" id="id_phone_number" required>
+    </div>
+    <div>
+      <label for="id_address">Address:</label>
+      <textarea name="address" id="id_address" required></textarea>
+    </div>
+    <div>
+      <label for="id_role">Role:</label>
+      <select id="id_role" name="role">
+          <option value="customer">Customer</option>
+          <option value="reviewer">Reviewer</option>
+          <option value="vendor">Vendor</option>
+          <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div>
+      <label for="id_profile_picture">Profile Picture:</label>
+      <input type="file" name="profile_picture" id="id_profile_picture">
+    </div>
+    <button type="submit">Save</button>
+    <button type="button" onclick="cancel()">Cancel</button>
+   
+  </form>
+  <script>
+    function cancel() {
+        // Redirect the user to the user list page
+        window.location.href = "{% url 'user_list' %}";
+    }
+</script>
+</div>
+{% endblock %}

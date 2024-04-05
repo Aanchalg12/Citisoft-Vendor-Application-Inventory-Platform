@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block title %} User Profile{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static "css/user_list.css" %}">
+<form action="{% url 'deleteuser' %}">
+    <button class="top-right-button" type="submit">Delete User</button>
+ </form>
+<h3 align="center">User Profile</h3>
+<style>
+    .profile-photo {
+        width: 150px; /* Adjust the width as needed */
+        height: 150px; /* Adjust the height as needed */
+        border-radius: 50%; /* Make the image circular */
+        object-fit: cover; /* Cover the entire area of the circular frame */
+    }
+</style>
+<div class="content">
+{% if user.profile_photo %}
+<div>
+    <img src="{{ user.profile_photo.url }}" alt="Profile Photo" class="profile-photo">
+</div>
+{% else %}
+<div>
+    <!-- Placeholder image or default profile photo -->
+    <img src="{% static '\images\Default_pic.jpeg' %}" alt="No Profile Photo" class="profile-photo">
+</div>
+{% endif %}
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+<p><strong>Address:</strong> {{ user.address }}</p>
+<p><strong>Role:</strong> {{ user.role }}</p>
+</div>
+{% endblock %}

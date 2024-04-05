@@ -1,0 +1,109 @@
+
+{% extends "base.html" %}
+{% load static %}
+{%block title %}Users{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static "css/user_list.css" %}">
+
+<form action="{% url 'adduser' %}">
+    <button class="top-right-button" type="submit">Add User</button>
+ </form>
+<h3 align="center">Vendor List</h3>
+
+<table align="center">
+    <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">E-mail Address</th>
+          <th scope="col">Phone Number</th>
+          <th scope="col">Address</th>
+          <th scope="col">ID</th>
+          <th scope="col">Action</th>
+        </tr>
+    </thead>
+      <tbody>
+        {% for vendor in vendor_page_obj %}
+        <tr>
+            <td>{{ vendor.username }}</td>
+            <td>{{ vendor.email }}</td>
+            <td>{{ vendor.phone_number }}</td>
+            <td>{{ vendor.address }}</td>
+            <td>{{ vendor.id }}</td>
+            <td><a href="{% url 'viewprofile' vendor.id  %}" class="btn btn-primary">View Profile</a></td>
+        </tr>
+        {% endfor %}
+  
+    </table>   
+<h3 align="center">Customers List</h3>
+<table align="center">
+    <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">E-mail Address</th>
+          <th scope="col">Phone Number</th>
+          <th scope="col">Address</th>
+          <th scope="col">ID</th>
+          <th scope="col">Action</th>
+        </tr>
+    </thead>
+      <tbody>
+        {% for customer in customer_page_obj %}
+        <tr>
+            <td>{{ customer.username }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone_number }}</td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.id }}</td>
+            <td><a href="{% url 'viewprofile' customer.id  %}" class="btn btn-primary">View Profile</a></td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>   
+    <h3 align="center">Reviewer List</h3>
+<table align="center">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">E-mail Address</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Address</th>
+            <th scope="col">ID</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reviewer in reviewer_page_obj %}
+        <tr>
+            <td>{{ reviewer.username }}</td>
+            <td>{{ reviewer.email }}</td>
+            <td>{{ reviewer.phone_number }}</td>
+            <td>{{ reviewer.address }}</td>
+            <td>{{ reviewer.id }}</td>
+            <td><a href="{% url 'viewprofile' reviewer.id  %}" class="btn btn-primary">View Profile</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>   
+ 
+{% endblock %}
+
+<!-- Pagination links -->
+<div class="pagination">
+  <span class="step-links">
+      {% if vendor_page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ vendor_page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ vendor_page_obj.number }} of {{ vendor_page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if vendor_page_obj.has_next %}
+          <a href="?page={{ vendor_page_obj.next_page_number }}">next</a>
+          <a href="?page={{ vendor_page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+  </span>
+</div>

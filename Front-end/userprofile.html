@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{%block title %}Update User Profile{% endblock %}
+<link rel="stylesheet" href="{% static "css/userprofile.css" %}">
+{% block content %}
+<h2 align="center">Update User Profile</h2>
+{% comment %} <form action="{% url 'deleteuser' %}">
+  <button class="top-right-button" type="submit">Delete User</button>
+</form> {% endcomment %}
+<div class="content">
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+{% endif %}
+{{n}}
+<form method="post" enctype="multipart/form-data" action="{% url 'saveupdateuser' %}">
+  {% csrf_token %}
+  <input type="hidden" name="user_id" value="{{ user.id }}">
+   <div>
+        <label for="id_username">Username:</label>
+        {{ form.username }}
+    </div>
+    <div>
+        <label for="id_email">Email:</label>
+        {{ form.email }}
+    </div>
+    <div>
+        <label for="id_phone_number">Phone Number:</label>
+        {{ form.phone_number }}
+    </div>
+    <div>
+        <label for="id_address">Address:</label>
+        {{ form.address }}
+    </div>
+    <div>
+        <label for="id_profile_photo">Profile Photo:</label>
+        {{ form.profile_photo }}
+    </div>
+
+<button type="submit">Save</button>
+<button type="button" onclick="cancel()">Cancel</button>
+</form>
+<script>
+  function cancel() {
+      // Redirect the user to the user list page
+      window.location.href = "{% url 'user_list' %}";
+  }
+</script>
+</div>
+{% endblock %}
