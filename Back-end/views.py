@@ -40,9 +40,17 @@ def user_list(request):
     return render(request, 'user_list.html', {'vendor_page_obj': vendor_page_obj, 'customer_page_obj': customer_page_obj, 'reviewer_page_obj': reviewer_page_obj})
 
 
-def deleteuser(request):
+# @permission_required('myCitisoft.can_delete_user')
+def deleteuser(request, user_id):
+    user = get_object_or_404(CustomUser, pk=user_id)
     
-    return render(request, 'deleteuser.html')
+    if request.method == 'POST':
+        user.delete()
+        # messages.success(request, "User is deleted")
+        return redirect('user_list')  # Redirect to a success page
+    else:
+        # Render the delete user confirmation page
+        return render(request, 'deleteuser.html', {'user': user})
 
 def viewprofile(request, user_id):
     # Retrieve the user object using the provided user_id
