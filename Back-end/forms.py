@@ -98,7 +98,23 @@ class AddUserForm(forms.ModelForm):
         fields = ['username', 'email', 'phone_number', 'address', 'role', 'profile_photo',]
 
 
+class SoftDeleteUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = []  # No fields needed, as this form is just for soft deletion
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Add a confirmation field to ensure the user intends to delete their account
+        self.fields['confirmation'] = forms.BooleanField(label='Confirm deletion', required=True)
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.is_active = False  # Soft delete the user
+            user.save()
+        return user
 
 
 
