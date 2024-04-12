@@ -39,12 +39,12 @@ urlpatterns = [
     path('user_list/', views.user_list, name='user_list'),
     path("adduser", views.adduser, name="adduser"),
     path("saveadduser", views.saveadduser, name="saveadduser"),
-    path("deleteuser", views.deleteuser, name="deleteuser"),
+    path('deleteuser/<int:user_id>/', views.deleteuser, name='deleteuser'),
     path("saveupdateuser", views.saveupdateuser, name="saveupdateuser"),
     path('application/', views.application, name='application'),
     path('viewprofile/<int:user_id>/', views.viewprofile, name='viewprofile'),
     path('search/', views.search_users, name='search_users'),
-    # path('soft-delete/<int:user_id>/', soft_delete_user, name='soft_delete_user'),
+   
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
