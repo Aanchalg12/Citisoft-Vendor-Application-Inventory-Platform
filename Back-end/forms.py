@@ -8,10 +8,11 @@ from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
 from .profile import Profile
 from django.contrib.auth import authenticate
-
+from .models import Application
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
+from .models import Vendor_Info
 
 class SignupForm(UserCreationForm):
     address = forms.CharField(label='Address', widget=forms.TextInput(attrs={'placeholder': 'Enter your address'}))
@@ -116,10 +117,16 @@ class SoftDeleteUserForm(forms.ModelForm):
             user.save()
         return user
 
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ['picture', 'title', 'description', 'vendor_name', 'software_type', 'additional_information', 'comments', 'ratings', 'vendor_company_link', 'contact_vendor']
 
 
-
-
+class VendorDetailsForm(forms.ModelForm):
+    class Meta:
+        model = Vendor_Info
+        fields = ['vendor_name', 'phone_number', 'address', 'established_year', 'number_of_employees', 'location_countries', 'location_cities', 'business_area', 'financial_services_client_types', 'vendor_company_link', 'internal_professional_services']
 
 
 
