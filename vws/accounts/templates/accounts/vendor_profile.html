@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}  <!-- This line loads the static files tag library -->
+
+{% block content %}
+<div id="profile-app">
+    <div class="sidebar w3-sidebar w3-bar-block w3side" style="width: 17%">
+        <div class="menu">
+            <button class="w3-bar-item w3-button" @click="goToPage('/vendorhome')">
+              Dashboard
+            </button>
+            <button class="w3-bar-item w3-button" @click="goToPage('/listselected')">
+              Selected Prodcuts
+            </button>
+            <button class="w3-bar-item w3-button" @click="goToPage('/listclients')">
+              cilents
+            </button>
+            <button class="w3-bar-item w3-button" @click="goToPage('/viewvendorprofile')">
+              Profile
+            </button>
+            <button class="w3-bar-item w3-button" @click="logout()">Logout</button>
+          </div>
+      </div>
+    
+      <div class="content" style="margin-left: 17%">
+        <div id="profile-app" class="container mt-5">
+            <div class="profile-header mb-3">
+                <img src="{% static 'accounts/imgs/profile.jpg' %}" alt="Profile Image" class="profile-image">
+                <h1>{{ user.username }}</h1>
+            </div>
+            <div class="profile-body">
+                <p><strong>Email:</strong> [[userInfo.email]]   </p>
+                <p><strong>First Name:</strong>[[userInfo.username]]  </p>
+                <p><strong>number:</strong> [[userInfo.number]]</p>
+                <!-- Add more fields as needed -->
+            </div>
+            <div class="profile-footer">
+                <button @click="logout()" class="btn btn-danger">Logout</button>
+            </div>
+        </div>
+        
+        <div class="product-list">
+            <h2>User Products</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="product in products" :key="product.id">
+                        <td>[[product.name]]</td>
+                        <td>[[product.details]]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+  
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+new Vue({
+    el: '#profile-app',
+    delimiters: ['[[', ']]'], // Change Vue delimiters to something other than [[ ]]
+
+    data: {
+        userInfo: {},
+        user_id:"",
+        products: []
+    },
+    methods: {
+        fetchUserData(userId) {
+            // api/users/3/
+            axios.get(`/api/users/${userId}`)
+                .then(response => {
+                    this.userInfo = response.data;
+                })
+                .catch(error => {
+                    console.error("Error fetching user data:", error);
+                });
+        },
+        fetchUserProducts(userId) {
+            axios.get(`/api/products?user_id=${userId}`)
+                .then(response => {
+                    this.products = response.data;
+                })
+                .catch(error => {
+                    console.error("Error fetching products:", error);
+                });
+        },
+        
+      goToPage(page) {
+        // Implement navigation logic
+        window.location.href = page; // Adjust the path as needed
+      },
+      getUserDetails() {
+        const userDetails = localStorage.getItem('userDetails');
+        if (userDetails) {
+
+            return JSON.parse(userDetails); // Convert JSON string back to object
+        }
+        return null; // Return null or a default object if no user details are stored
+    },
+    },
+    mounted() {
+        const searchParams = new URLSearchParams(window.location.search);
+        console.log(searchParams);
+       var user= this.getUserDetails()
+        this.user_id = user.id
+console.log(user,"user");
+        this.fetchUserData(this.user_id);
+        this.fetchUserProducts(this.user_id);
+    },
+    logout() {
+            // Implement logout logic
+            window.location.href='/'
+
+        },
+});
+</script>
+<style>
+ /* General Page Styles */
+body, html {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: #2C3E50;
+    color: #fff;
+}
+
+.sidebar .menu button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: none;
+    color: #fff;
+    text-align: left;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sidebar .menu button:hover {
+    background-color: #34495E;
+    color: #1ABC9C;
+}
+
+/* Content Area Styles */
+.content {
+    padding: 20px;
+    background: #ECF0F1;
+    min-height: 100vh;
+}
+
+/* User Info Styles */
+.user-info h5 {
+    font-size: 20px;
+    color: #2980B9;
+    margin-bottom: 5px;
+}
+
+/* Table Styles */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table th {
+    background-color: #3498DB;
+    color: #fff;
+}
+
+.table td {
+    font-size: 16px;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Button Styles */
+.btn {
+    padding: 8px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #3498DB;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #2980B9;
+}
+
+/* Link and Interaction Styles */
+a {
+    color: #3498DB;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+ 
+ .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    object-fit: cover;
+    border: 3px solid #333;
+}
+
+.profile-header {
+    text-align: center;
+}
+
+.profile-body {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+}
+
+.profile-footer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+    
+    .profile-header {
+        text-align: center;
+    /* margin: 30px; */
+    background: bisque;
+    padding: 30px;
+    }
+    
+    .profile-photo {
+         /* margin: 20px auto; */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    /* background: black; */
+    margin: auto;
+    }
+    
+    .profile-pic {
+        width: 100%;
+        height: auto;
+    }
+    
+    .profile-details h1 {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+    
+    .profile-details p {
+        font-size: 18px;
+        color: #666;
+    }
+    
+    /* Styling for the products list */
+    .product-list {
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+    
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f4f4f4;
+    }
+    </style>
+    
+{% endblock %}

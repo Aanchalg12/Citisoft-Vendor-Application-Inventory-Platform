@@ -3,16 +3,16 @@
 <div class="" id="viewproduct-app">
   <div class="sidebar w3-sidebar w3-bar-block w3side" style="width: 17%">
     <div class="menu">
-      <button class="w3-bar-item w3-button" @click="goToPage('/clienthome')">
+      <button class="w3-bar-item w3-button" @click="goToPage('/vendorhome')">
         Dashboard
       </button>
-      <button class="w3-bar-item w3-button" @click="goToPage('/listinterseted')">
-        Interseted
+      <button class="w3-bar-item w3-button" @click="goToPage('/listselected')">
+        Selected Prodcuts
       </button>
-      <button class="w3-bar-item w3-button" @click="goToPage('/listvendors')">
-        Vendors
+      <button class="w3-bar-item w3-button" @click="goToPage('/listclients')">
+        cilents
       </button>
-      <button class="w3-bar-item w3-button" @click="goToPage('/profile')">
+      <button class="w3-bar-item w3-button" @click="goToPage('/viewvendorprofile')">
         Profile
       </button>
       <button class="w3-bar-item w3-button" @click="logout()">Logout</button>
@@ -29,7 +29,7 @@
       <h5>{{ userName }}</h5>
     </div>
     <div class="dashboard">
-      <h2>View Product</h2>
+      <h2>Vendor Home</h2>
       <div>
         <label for="filterType">Filter by Type:</label>
         <select id="filterType" v-model="filterType" @change="applyFilter()">
@@ -46,6 +46,7 @@
             [[ tag ]]
           </option>
         </select>
+        <button @click="goToPage('/createproduct')" >add Product</button>
       </div>
 
       <table class="table">
@@ -72,24 +73,14 @@
               <button class="btn btn-primary" @click="viewProduct(product.pk)">
                 View
               </button>
-              <button
-                class="btn btn-success"
-                @click="updateStatus(product.pk, 1)"
-              >
-                Interested
-              </button>
-              <button
-                class="btn btn-danger"
-                @click="updateStatus(product.pk,2 )"
-              >
-                Not Interested
-              </button>
+              
             </td>
-            
             <td>
               [[ product.status === 1 ? 'Interested' : product.status === -1 ?
               'Not Interested' : 'Pending' ]]
             </td>
+            
+     
           </tr>
         </tbody>
       </table>
@@ -104,6 +95,7 @@
 
     data() {
       return {
+        users:[],
         products: [],
         filteredProducts: [],
         filterType: "",
@@ -143,7 +135,7 @@
           });
       },
       viewProduct(id) {
-        window.location.href = `/viewproduct?id=${id}`; // Redirect to product detail page
+        window.location.href = `/viewprod?id=${id}`; // Redirect to product detail page
       },
       goToPage(page) {
         window.location.href = page; // Adjust the path as needed
@@ -164,9 +156,17 @@
           })
           .catch((error) => console.error("Error fetching products:", error));
       },
+      getUserDetails() {
+        const userDetails = localStorage.getItem("userDetails");
+        console.log(userDetails);
+        if (userDetails) {
+          return JSON.parse(userDetails); // Convert JSON string back to object
+        }
+        return null; // Return null or a default object if no user details are stored
+      },
       fetchProducts() {
         axios
-          .get("/api/products?status=0")
+          .get(`/api/products?vendor_id=${this.users.id}`)
           .then((response) => {
             this.products = response.data;
             this.filteredProducts = response.data;
@@ -183,11 +183,113 @@
       },
     },
     mounted() {
-      const searchParams = new URLSearchParams(window.location.search);
-      this.productId = searchParams.get("id");
+ 
+      this.users = this.getUserDetails();
+
       this.fetchProducts(); // Call this method to fetch product details when the component mounts
     },
   });
 </script>
-
+<style>
+  /* General Page Styles */
+  body, html {
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      line-height: 1.6;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+      background-color: #2C3E50;
+      color: #fff;
+  }
+  
+  .sidebar .menu button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: none;
+      color: #fff;
+      text-align: left;
+      transition: background 0.3s, color 0.3s;
+  }
+  
+  .sidebar .menu button:hover {
+      background-color: #34495E;
+      color: #1ABC9C;
+  }
+  
+  /* Content Area Styles */
+  .content {
+      padding: 20px;
+      background: #ECF0F1;
+      min-height: 100vh;
+  }
+  
+  /* User Info Styles */
+  .user-info h5 {
+      font-size: 20px;
+      color: #2980B9;
+      margin-bottom: 5px;
+  }
+  
+  /* Table Styles */
+  .table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .table th, .table td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      text-align: left;
+  }
+  
+  .table th {
+      background-color: #3498DB;
+      color: #fff;
+  }
+  
+  .table td {
+      font-size: 16px;
+  }
+  
+  .table tr:nth-child(even) {
+      background-color: #f2f2f2;
+  }
+  
+  /* Button Styles */
+  .btn {
+      padding: 8px 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+  
+  .btn-primary {
+      background-color: #3498DB;
+      color: #fff;
+  }
+  
+  .btn-primary:hover {
+      background-color: #2980B9;
+  }
+  
+  /* Link and Interaction Styles */
+  a {
+      color: #3498DB;
+      text-decoration: none;
+  }
+  
+  a:hover {
+      text-decoration: underline;
+  }
+  
+  
+  </style>
+  
 {% endblock %} +

@@ -47,7 +47,9 @@ INSTALLED_APPS = [
 
 # settings.py
 MEDIA_URL = '/media/'
-MEDIA_ROOT = "C:\\Users\\Rachana Donepudi\\Documents\\vws"
+MEDIA_ROOT = "C:\\Users\\DELL\\Desktop\\vws"
+
+
 
 
 MIDDLEWARE = [

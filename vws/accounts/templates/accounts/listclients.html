@@ -3,20 +3,20 @@
 <div class="" id="listvendors-app">
   <div class="sidebar w3-sidebar w3-bar-block w3side" style="width: 17%">
     <div class="menu">
-      <button class="w3-bar-item w3-button" @click="goToPage('/clienthome')">
-        Dashboard
-      </button>
-      <button class="w3-bar-item w3-button" @click="goToPage('/listinterseted')">
-        Interseted
-      </button>
-      <button class="w3-bar-item w3-button" @click="goToPage('/listvendors')">
-        Vendors
-      </button>
-      <button class="w3-bar-item w3-button" @click="goToPage('/profile')">
-        Profile
-      </button>
-      <button class="w3-bar-item w3-button" @click="logout()">Logout</button>
-    </div>
+        <button class="w3-bar-item w3-button" @click="goToPage('/vendorhome')">
+          Dashboard
+        </button>
+        <button class="w3-bar-item w3-button" @click="goToPage('/listselected')">
+          Selected Prodcuts
+        </button>
+        <button class="w3-bar-item w3-button" @click="goToPage('/listclients')">
+          cilents
+        </button>
+        <button class="w3-bar-item w3-button" @click="goToPage('/profile')">
+          Profile
+        </button>
+        <button class="w3-bar-item w3-button" @click="logout()">Logout</button>
+      </div>
   </div>
 
   <div class="content" style="margin-left: 17%">
@@ -35,11 +35,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="vendor in vendors" :key="vendor.pk">
+              <tr v-for="vendor in vendors" :key="vendor.id">
                 <td>[[ vendor.role_id ]]</td>
                 <td>[[ vendor.email ]]</td>
                 <td>
-                  <button class="btn btn-primary" @click="viewProduct(vendor.pk)">
+                  <button class="btn btn-primary" @click="viewProduct(vendor.id)">
                     View
                   </button>
                 </td>
@@ -94,11 +94,7 @@
         const file = e.target.files[0];
         this.product.pdf_attachment = file;
       },
-      logout() {
-            // Implement logout logic
-            window.location.href='/'
-
-        },
+ 
       createProduct() {
         this.product.vendor_id = this.users.id;
 
@@ -135,10 +131,14 @@
             // Handle error (e.g., displaying error messages)
           });
       },
+      logout() {
+            // Implement logout logic
+            window.location.href='/'
 
+        },
       fetchvendors() {
         axios
-          .get("/api/user_list?role_id=1  ")
+          .get("/api/user_list?role_id=2")
           .then((response) => {
             this.vendors = response.data; // Assuming the API returns an array of products
             console.log('====================================');
@@ -151,7 +151,7 @@
       },
 
       viewProduct(id) {
-        window.location.href = `/viewvendorprofile/?id=${id}`; // Redirect to product detail page
+        window.location.href = `/viewclient/?id=${id}`; // Redirect to product detail page
       },
     },
     mounted() {
@@ -163,6 +163,106 @@
     },
   });
 </script>
-  
+  <style>
+/* General Page Styles */
+body, html {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: #2C3E50;
+    color: #fff;
+}
+
+.sidebar .menu button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: none;
+    color: #fff;
+    text-align: left;
+    transition: background 0.3s, color 0.3s;
+}
+
+.sidebar .menu button:hover {
+    background-color: #34495E;
+    color: #1ABC9C;
+}
+
+/* Content Area Styles */
+.content {
+    padding: 20px;
+    background: #ECF0F1;
+    min-height: 100vh;
+}
+
+/* User Info Styles */
+.user-info h5 {
+    font-size: 20px;
+    color: #2980B9;
+    margin-bottom: 5px;
+}
+
+/* Table Styles */
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.table th, .table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table th {
+    background-color: #3498DB;
+    color: #fff;
+}
+
+.table td {
+    font-size: 16px;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Button Styles */
+.btn {
+    padding: 8px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #3498DB;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #2980B9;
+}
+
+/* Link and Interaction Styles */
+a {
+    color: #3498DB;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+</style>
 
 {% endblock %}

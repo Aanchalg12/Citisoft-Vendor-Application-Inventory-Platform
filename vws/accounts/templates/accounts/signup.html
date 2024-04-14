@@ -4,31 +4,18 @@
 {% block content %}
 <!-- Your form and other template content go here -->
 <div id="signup-app">
-    <div class="row justify-content-center">
-        <form @submit.prevent="submitForm" class="p-3">
-            <div class="mb-3 ">
-                <label for="username" class="form-label">Username:</label>
-                <input type="text" v-model="username" class="form-control" id="username">
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" v-model="email" class="form-control" id="email">
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password:</label>
-                <input type="password" v-model="password" class="form-control" id="password">
-            </div>
-            <div class="mb-3">
-                <label for="role_id" class="form-label">Role:</label>
-                <select v-model="role_id" class="form-select" id="role_id">
-                    <option value="1">Vendor</option>
-                    <option value="2">Client</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-        </form>
-    </div>
-
+    <form @submit.prevent="submitForm">
+        Username: <input type="text" v-model="username"><br>
+        Email: <input type="email" v-model="email"><br>
+        employee Id: <input type="text" v-model="emp_id"><br>
+        Phone number: <input type="text" v-model="number"><br>
+        Password: <input type="password" v-model="password"><br>
+        Role: <select v-model="role_id">
+            <option value="1">Vendor</option>
+            <option value="2">Client</option>
+        </select><br>
+        <button type="submit">Sign Up</button>
+    </form>
 </div>
 
 <script src="{% static 'accounts/js/signup.js' %}"></script>

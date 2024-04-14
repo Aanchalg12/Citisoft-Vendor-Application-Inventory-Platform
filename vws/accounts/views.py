@@ -58,6 +58,21 @@ def get_all_user_profiles(request):
         profiles = UserProfile.objects.all()
         serializer = UserProfileSerializers(profiles, many=True)
         return Response(serializer.data)
+    
+@api_view(['GET'])
+def get_user_by_id(request, user_id):
+    """
+    Retrieve a single user by their ID.
+    """
+    # Correctly using `user_id` to fetch the user
+    user = get_object_or_404(User.objects.select_related('userprofile'), pk=user_id)
+    
+    # Serialize the user instance
+    serializer = UserProfileSerializer(user)
+    
+    # Return the serialized data
+    return Response(serializer.data)
+
 
 
 @api_view(['PUT'])
@@ -86,6 +101,58 @@ def update_product_info(request, product_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+@api_view(['GET'])
+def get_products(request):
+    """
+    Retrieve products optionally filtered by query parameters.
+    """
+    queryset = Product.objects.all()
+
+    # Filter by `id` if provided
+    product_id = request.query_params.get('pk')
+    if product_id:
+        queryset = queryset.filter(pk=product_id)
+
+    # Filter by `vendor_id` if provided
+    vendor_id = request.query_params.get('vendor_id')
+    if vendor_id:
+        queryset = queryset.filter(vendor_id=vendor_id)
+
+    # Filter by `product_type` if provided
+    product_type = request.query_params.get('product_type')
+    if product_type:
+        queryset = queryset.filter(Product_type=product_type)
+    
+        # Filter by `product_type` if provided
+    tags = request.query_params.get('tags')
+    if tags:
+        queryset = queryset.filter(tags=tags)
+    
+    p_status = request.query_params.get('status')
+
+    if p_status:
+        queryset = queryset.filter(status=p_status)
+
+    # Filter by `client_id` if provided
+    client_id = request.query_params.get('client_id')
+    if client_id:
+        queryset = queryset.filter(client_id=client_id)
+
+    # Filter by `tech` if provided
+    tech = request.query_params.get('tech')
+    if tech:
+        queryset = queryset.filter(tech=tech)
+
+    # If `id` is provided, we expect to return a single object
+    if product_id:
+        product = get_object_or_404(queryset)
+        serializer = ProductSerializer(product)
+    else:
+        serializer = ProductSerializer(queryset, many=True)
+
+    return Response(serializer.data)
+
 class ProductFilter(filters.FilterSet):
     class Meta:
         model = Product
@@ -106,6 +173,7 @@ def product_list(request):
 
 def download_docx(request, filename):
     print(filename)
+    
     file_path = os.path.join(settings.MEDIA_ROOT, 'product_pdfs', filename)
     
     if os.path.exists(file_path):
@@ -168,6 +236,14 @@ def get_feedback_messages(request):
     return JsonResponse(list(messages), safe=False)
 
 
+@api_view(['POST'])
+def create_feedback(request):
+    if request.method == 'POST':
+        serializer = FeedbackSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def craeteProduct_api(request):
@@ -192,6 +268,40 @@ def craeteProduct_api(request):
         return Response(serializer.errors, status=400)
 
 
+
+@api_view(['POST'])
+def login_api(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+    user = User.objects.get(username=username)
+    print(user.id)  # This should print the user's id
+
+    if user is not None:
+        user_details = {
+            "id":user.id,
+            "username": user.username,
+            "email": user.email,
+        }
+
+        # Assuming you have a role_id in your UserProfile model to represent the user's role
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+            role = user_profile.role_id  # Or however you're storing the role
+            user_details["role"] = role
+        except UserProfile.DoesNotExist:
+            user_details["role"] = 'No role assigned'
+        
+        # You can include additional user details here as needed
+        
+        response_data = {
+            "message": "Login successful",
+            "user": user_details,
+        }
+        return Response(response_data)
+    else:
+        return Response({"message": "Invalid credentials"}, status=400)
+    
 
 @csrf_exempt
 def signup(request):
