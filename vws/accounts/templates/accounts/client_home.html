@@ -1,0 +1,206 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="" id="viewproduct-app">
+  <div class="sidebar w3-sidebar w3-bar-block w3side" style="width: 17%">
+    <div class="menu">
+      <button class="w3-bar-item w3-button" @click="goToPage('/clienthome')">
+        Dashboard
+      </button>
+      <button class="w3-bar-item w3-button" @click="goToPage('/listinterseted')">
+        Interseted
+      </button>
+      <button class="w3-bar-item w3-button" @click="goToPage('/listvendors')">
+        Vendors
+      </button>
+      <button class="w3-bar-item w3-button" @click="goToPage('/profile')">
+        Profile
+      </button>
+      <button class="w3-bar-item w3-button" @click="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="content" style="margin-left: 17%">
+    <div class="user-info">
+      <img src="{% static 'images/a.jpg' %}" class="rounded-circle" alt="User Image" />
+      <h5>{{ userName }}</h5>
+    </div>
+    <div class="dashboard">
+      <h2>View Product</h2>
+      <div>
+        <label for="filterType">Filter by Type:</label>
+        <select id="filterType" v-model="filterType" @change="applyFilter()">
+          <option value="">All</option>
+          <option v-for="type in productTypes" :key="type" :value="type">
+            [[ type ]]
+          </option>
+        </select>
+
+        <label for="filterTags">Filter by Tags:</label>
+        <select id="filterTags" v-model="filterTags" @change="applyFilter()">
+          <option value="">All</option>
+          <option v-for="tag in productTags" :key="tag" :value="tag">
+            [[ tag ]]
+          </option>
+        </select>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Details</th>
+            <th>Tags</th>
+            <th>Type</th>
+            <th>Technology</th>
+            <th>Actions</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="product in filteredProducts" :key="product.pk">
+            <td>[[ product.name ]]</td>
+            <td>[[ product.details ]]</td>
+            <td>[[ product.tags ]]</td>
+            <td>[[ product.Product_type ]]</td>
+            <td>[[ product.tech ]]</td>
+
+            <td>
+              <button class="btn btn-primary" @click="viewProduct(product.pk)">
+                View
+              </button>
+              <button class="btn btn-primary" @click="download(product.pdf_attachment)">
+                download
+              </button>
+              <button class="btn btn-success" @click="updateStatus(product.pk, 1)">
+                Interested
+              </button>
+              <button class="btn btn-danger" @click="updateStatus(product.pk,2 )">
+                Not Interested
+              </button>
+            </td>
+
+            <td>
+              [[ product.status === 1 ? 'Interested' : product.status === -1 ?
+              'Not Interested' : 'Pending' ]]
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: "#viewproduct-app",
+    delimiters: ["[[", "]]"], // Change Vue delimiters to something other than [[ ]]
+
+    data() {
+      return {
+        products: [],
+        filteredProducts: [],
+        filterType: "",
+        filterTags: "",
+        productTypes: [],
+        productTags: [],
+        userName: "", // Assuming you will fetch or assign this
+        productId: "",
+        product: {
+          name: "",
+          website_url: "",
+          details: "",
+          tags: "",
+          Product_type: "",
+          tech: "",
+        },
+      };
+    },
+    methods: {
+      download(file) {
+    const fileName = file.substring(file.lastIndexOf("/") + 1);
+    console.log(fileName); 
+    axios({
+        url: `/download/${fileName}`,
+        method: 'GET',
+        responseType: 'blob', // Important: set the response type to blob
+    })
+    .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName); // Set the filename for the downloaded file
+        document.body.appendChild(link);
+        link.click();
+    })
+    .catch((error) => console.error("Error downloading file:", error));
+}
+,
+      applyFilter() {
+        let queryParams = {};
+
+        if (this.filterTags) {
+          queryParams.tags = this.filterTags;
+        }
+        if (this.filterType) {
+          queryParams.product_type = this.filterType;
+        }
+        let query = new URLSearchParams(queryParams).toString();
+        axios
+          .get(`/api/products/?${query}`)
+          .then((response) => {
+            this.filteredProducts = response.data;
+          })
+          .catch((error) => {
+            console.error("Error fetching filtered products:", error);
+          });
+      },
+      viewProduct(id) {
+        window.location.href = `/viewproduct?id=${id}`; // Redirect to product detail page
+      },
+      goToPage(page) {
+        window.location.href = page; // Adjust the path as needed
+      },
+      logout() {
+        // Implement logout logic
+        window.location.href = '/'
+
+      },
+      updateStatus(pk, id) {
+        var data = {
+          status: id,
+        };
+        axios
+          .put(`/api/updateproductinfo/${pk}/`, data)
+          .then((response) => {
+            console.log(response);
+            window.location.href = '/listinterseted'
+          })
+          .catch((error) => console.error("Error fetching products:", error));
+      },
+      fetchProducts() {
+        axios
+          .get("/api/products?status=0")
+          .then((response) => {
+            this.products = response.data;
+            this.filteredProducts = response.data;
+            console.log(this.products);
+            this.productTypes = [
+              ...new Set(this.products.map((p) => p.Product_type)),
+            ];
+            console.log(this.productTypes, "asdas");
+            this.productTags = [
+              ...new Set(this.products.flatMap((p) => p.tags)),
+            ];
+          })
+          .catch((error) => console.error("Error fetching products:", error));
+      },
+    },
+    mounted() {
+      const searchParams = new URLSearchParams(window.location.search);
+      this.productId = searchParams.get("id");
+      this.fetchProducts(); // Call this method to fetch product details when the component mounts
+    },
+  });
+</script>
+
+{% endblock %} +

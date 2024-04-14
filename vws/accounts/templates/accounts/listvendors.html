@@ -1,0 +1,168 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="" id="listvendors-app">
+  <div class="sidebar w3-sidebar w3-bar-block w3side" style="width: 17%">
+    <div class="menu">
+      <button class="w3-bar-item w3-button" @click="goToPage('/clienthome')">
+        Dashboard
+      </button>
+      <button class="w3-bar-item w3-button" @click="goToPage('/listinterseted')">
+        Interseted
+      </button>
+      <button class="w3-bar-item w3-button" @click="goToPage('/listvendors')">
+        Vendors
+      </button>
+      <button class="w3-bar-item w3-button" @click="goToPage('/profile')">
+        Profile
+      </button>
+      <button class="w3-bar-item w3-button" @click="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="content" style="margin-left: 17%">
+    <div class="user-info">
+       <h5>[[this.userName]]</h5>
+    </div>
+
+    <div class="product-list">
+      <h2>Vendors List</h2>
+         <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="vendor in vendors" :key="vendor.pk">
+                <td>[[ vendor.username ]]</td>
+                <td>[[ vendor.email ]]</td>
+                <td>
+                  <button class="btn btn-primary" @click="viewProduct(vendor.id)">
+                    View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>      </div>
+  
+      
+  
+    </div>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: "#listvendors-app",
+    delimiters: ['[[', ']]'], // Change Vue delimiters to something other than [[ ]]
+
+    data() {
+      return {
+        userName: "", // Assuming you will fetch or assign this
+        products: [], // Store fetched products
+        vendors:[],
+        a:"mk",
+        product: {
+          name: "",
+          website_url: "",
+          vendor_id: null,
+          details: "",
+          pdf_attachment: null,
+          tags: "",
+          Product_type: "",
+          tech: "",
+        },
+        users: [], // Assuming you will fetch this
+      };
+    },
+    methods: {
+      getUserDetails() {
+        const userDetails = localStorage.getItem("userDetails");
+        if (userDetails) {
+          return JSON.parse(userDetails); // Convert JSON string back to object
+        }
+        return null; // Return null or a default object if no user details are stored
+      },
+
+      goToPage(page) {
+        // Implement navigation logic
+        window.location.href = page; // Adjust the path as needed
+      },
+      onFileChange(e) {
+        const file = e.target.files[0];
+        this.product.pdf_attachment = file;
+      },
+      logout() {
+            // Implement logout logic
+            window.location.href='/'
+
+        },
+      createProduct() {
+        this.product.vendor_id = this.users.id;
+
+        const formData = new FormData();
+
+        // Append each product attribute to formData
+        Object.keys(this.product).forEach((key) => {
+          if (key !== "pdf_attachment") {
+            formData.append(key, this.product[key]);
+          } else if (this.product.pdf_attachment) {
+            // Handle file separately
+            formData.append(
+              "pdf_attachment",
+              this.product.pdf_attachment,
+              this.product.pdf_attachment.name
+            );
+          }
+        });
+
+        // Example: Post to Django view (adjust URL as needed)
+        axios
+          .post("/api/createproduct/", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            window.location.href = "product"; // Adjust the path as needed
+            // Handle success (e.g., showing a success message, clearing the form)
+          })
+          .catch((error) => {
+            console.log(error);
+            // Handle error (e.g., displaying error messages)
+          });
+      },
+
+      fetchvendors() {
+        axios
+          .get("/api/user_list?role_id=1  ")
+          .then((response) => {
+            this.vendors = response.data; // Assuming the API returns an array of products
+            console.log('====================================');
+            console.log(this.vendors);
+            console.log('====================================');
+          })
+          .catch((error) => {
+            console.error("There was an error fetching the vendors:", error);
+          });
+      },
+
+      viewProduct(id) {
+        window.location.href = `/vendor_profile/?id=${id}`; // Redirect to product detail page
+      },
+    },
+    mounted() {
+      // Fetch blog, users, and set userName here
+      this.users = this.getUserDetails();
+      this.userName = this.users.username;
+      this.fetchvendors()
+
+    },
+  });
+</script>
+  
+
+{% endblock %}

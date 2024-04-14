@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="" id="viewproduct-app">
+    <div class="sidebar w3-sidebar w3-bar-block w3side" style="width:17%">
+      <div class="menu">
+        <button class="w3-bar-item w3-button" @click="goToPage('/clienthome')">
+          Dashboard
+        </button>
+        <button class="w3-bar-item w3-button" @click="goToPage('/listinterseted')">
+          Interseted
+        </button>
+        <button class="w3-bar-item w3-button" @click="goToPage('/listvendors')">
+          Vendors
+        </button>
+        <button class="w3-bar-item w3-button" @click="goToPage('/profile')">
+          Profile
+        </button>
+        <button class="w3-bar-item w3-button" @click="logout()">Logout</button>
+      </div>
+    </div>
+  
+    <div class="content" style="margin-left:17%">
+        <div class="user-info">
+          <img src="{% static 'images/a.jpg' %}" class="rounded-circle" alt="User Image">
+          <h5>{{ userName }}</h5>
+        </div>
+        <div class="dashboard">
+          <h2>View Product</h2>
+          <div>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" id="name" v-model="product.name" disabled>
+            </div>
+            <div class="form-group">
+              <label for="website_url">Website URL</label>
+              <input type="text" class="form-control" id="website_url" v-model="product.website_url" disabled>
+            </div>
+            <div class="form-group">
+              <label for="details">Details</label>
+              <textarea class="form-control" id="details" v-model="product.details" rows="3" disabled></textarea>
+            </div>
+            <div class="form-group">
+              <label for="tags">Tags</label>
+              <input type="text" class="form-control" id="tags" v-model="product.tags" disabled>
+            </div>
+            <div class="form-group">
+              <label for="Product_type">Product Type</label>
+              <input type="text" class="form-control" id="Product_type" v-model="product.Product_type" disabled>
+            </div>
+            <div class="form-group">
+              <label for="tech">Technology</label>
+              <input type="text" class="form-control" id="tech" v-model="product.tech" disabled>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+</div>
+
+<script>
+
+new Vue({
+    el: '#viewproduct-app',
+    data() {
+        return {
+            userName: '', // Assuming you will fetch or assign this
+            productId:"",
+            product: {
+                name: '',
+                website_url: '',
+                details: '',
+                tags: '',
+                Product_type: '',
+                tech: '',
+            }
+        };
+    },
+    methods: {
+        goToPage(page) {
+            window.location.href = page; // Adjust the path as needed
+        },
+        logout() {
+            // Implement logout logic
+            window.location.href='/'
+
+        },
+        fetchProduct() {
+            // Fetch product data from an API
+            axios.get(`/api/products?pk=${this.productId}`)  // Placeholder URL, replace with actual product ID or dynamic fetching logic
+            .then(response => {
+                this.product = response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching product details:', error);
+            });
+        }
+    },
+    mounted() {
+        const searchParams = new URLSearchParams(window.location.search);
+        this.productId = searchParams.get('id');
+        this.fetchProduct();  // Call this method to fetch product details when the component mounts
+    }
+})
+</script>
+
+{% endblock %}
