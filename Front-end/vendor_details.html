@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{%block title %}Vendor Details{% endblock %}
+{% block content %}
+<form action="{% url 'vendor_details_add' %}" >
+    <button class="top-right-button" type="submit">Add New Vendor Details</button>
+ </form>
+<div class="content">
+    <h1>Vendor Details </h1>
+    <table border="1">
+        <thead>
+            <tr>
+                
+                <th>Vendor Name</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Established Date</th>
+                <th>Number of Employees</th>
+                <th>Location Country</th>
+                <th>Company URL</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vendor in vendors %}
+            <tr>
+                <td>{{ vendor.vendor_name }}</td>
+                <td>{{ vendor.phone_number }}</td>
+                <td>{{ vendor.address }}</td>
+                <td>{{ vendor.established_year }}</td>
+                <td>{{ vendor.number_of_employees }}</td>
+                <td>{{ vendor.location_countries }}</td>
+                <td>{{ vendor.vendor_company_link }}</td>
+                <td>
+                    <a href="{% url 'vendor_detail_info' vendor.pk %}">View Application</a>
+                    <a href="{% url 'vendor_info_pdf' vendor.pk %}">Generate Report</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

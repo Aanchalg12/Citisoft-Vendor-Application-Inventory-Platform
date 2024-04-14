@@ -1,32 +1,50 @@
-{% extends "myApp/base.html" %}
-{% block content %}
-<main>
-   <br>
-   <div class="card-deck">
-     <div class="col">
-       <div class="col-md-5" style="width: 18rem;>
-         <div class="card text-center text-white  mb-3" id="total-users">
-             <div class="card-header">
-               <h5 class="card-title">Total number of Users</h5>
-             </div>
-             <div class="card-body">
-               <h3 class="card-title">{{total_users}}</h3>
-             </div>
-         </div>
-        </div>
-     
-        <div class="col">
-       <div class="col-md-5" style="width: 18rem;>
-         <div class="card text-center text-white  mb-3" id="total-applications">
-             <div class="card-header">
-               <h5 class="card-title">Total number of Applications</h5>
-             </div>
-             <div class="card-body">
-               <h3 class="card-title">{{total_applications}}</h3>
-             </div>
-         </div>
-       </div>
-      </div>
-    
-</main>
-{% endblock %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citisoft Vendor Application Inventory Platform</title>
+    <link rel="stylesheet" href="{% static "css/styles.css" %}">
+</head>
+<body>
+    <header>
+        <div class="logo">Citisoft</div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#features">Features</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="hero">
+        <h1>Welcome to Citisoft Vendor Application Inventory Platform</h1>
+        <p>Your solution for efficient Vendor Management, Performance Monitoring and Inventory Management.</p>
+        <a href="{% url 'signup' %}" class="cta">Get Started</a>
+    </section>
+    <section id="about" class="about">
+        <h2>About Us</h2>
+        <p>Citisoft is a leading provider of vendor inventory management solutions. Our platform helps businesses streamline their procurement processes and optimize inventory management.</p>
+    </section>
+    <section id="features" class="features">
+        <h2>Key Features</h2>
+        <ul>
+            <li>Real-time inventory tracking</li>
+            <li>Vendor performance analytics</li>
+            <li>Automated purchase order generation</li>
+            <li>Inventory forecasting and optimization</li>
+        </ul>
+    </section>
+    <section id="contact" class="contact">
+        <h2>Contact Us</h2>
+        <p>Have a question or need assistance? Reach out to our support team.</p>
+        <a href="mailto:info@citisoft.com" class="cta">Contact Support</a>
+    </section>
+    <footer>
+        <p>&copy; 2024 Citisoft. All rights reserved.</p>
+    </footer>
+</body>
+</html>

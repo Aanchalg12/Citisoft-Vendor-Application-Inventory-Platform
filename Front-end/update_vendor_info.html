@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{%block title %}Update vendor details{% endblock %}
+{% block content %}
+{% load static %}
+<div class="content">
+    <h2>Update Vendor Information</h2>
+    <form action="{% url 'update_vendor_info' vendor_info_id=vendor_info_id %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Application</button>
+        <button type="button" onclick="cancel()">Cancel</button>
+    </form>
+</div>
+<script>
+    function cancel() {
+        window.location.href = "{% url 'vendor_details' %}";
+    }
+</script>
+{% endblock %}
+
+

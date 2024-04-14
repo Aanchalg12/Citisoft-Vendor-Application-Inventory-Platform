@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{%block title %}Vendor Information Details{% endblock %}
+{% block content %}
+{% load static %}
+<form id="update-form1" action="{% url 'delete_vendor_info' vendor_info_id=vendor.pk %}" method="POST">
+    {% csrf_token %}
+    <button id="update-button1" class="top-right-button" type="submit">Delete Vendor Detail</button>
+ </form> 
+<div class="content">
+<h1>Vendor Details</h1>
+<p>Vendor Name: {{ vendor.vendor_name }}</p>
+<p>Phone Number: {{ vendor.phone_number }}</p>
+<p>Address: {{ vendor.address }}</p>
+<p>Established Date: {{ vendor.established_year }}</p>
+<p>Number of Employees: {{ vendor.number_of_employees }}</p>
+<p>Location Countries: {{ vendor.location_countries }}</p>
+<p>Location Cities: {{ vendor.location_cities }}</p>
+<p>Business Area: {{ vendor.business_area }}</p>
+<p>Financial Services Client Types: {{ vendor.financial_services_client_types }}</p>
+<p>Company URL: {{ vendor.vendor_company_link }}</p>
+<p>Internal Professional Services: {{ vendor.internal_professional_services }}</p>
+<form id="update-form" action="{% url 'update_vendor_info' vendor_info_id=vendor.pk %}" method="POST">
+    {% csrf_token %}
+    <button id="update-button" type="submit">Update Vendor Details</button>
+</form>
+</div>
+
+<script>
+// Prevent the form from submitting and navigate to the update page when the button is clicked
+document.getElementById('update-button').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent the form from submitting
+    window.location.href = document.getElementById('update-form').action;
+});
+document.getElementById('update-button1').addEventListener('click', function(event) {
+    event.preventDefault();  // Prevent the form from submitting
+    window.location.href = document.getElementById('update-form1').action;
+});
+</script>
+{% endblock %}

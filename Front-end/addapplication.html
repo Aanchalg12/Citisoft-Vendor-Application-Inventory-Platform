@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{%block title %}Add Application{% endblock %}
+<link rel="stylesheet" href="{% static "css/adduser.css" %}">
+{% block content %}
+<h2 align="center">Add Application</h2>
+<div class="content">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+    <button type="button" onclick="cancel()">Cancel</button>
+   
+</form>
+<script>
+  function cancel() {
+      window.location.href = "{% url 'application' %}";
+  }
+</script>
+</div>
+{% endblock %}

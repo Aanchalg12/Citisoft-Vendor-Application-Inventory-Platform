@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{%block title %}Add vendor details{% endblock %}
+{% block content %}
+
+<div class="content">
+    <h1>Add New Vendor Details</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+        <button type="button" onclick="cancel()">Cancel</button>
+   
+</form>
+<script>
+  function cancel() {
+      window.location.href = "{% url 'vendor_details' %}";
+  }
+</script>
+
+</div>
+{% endblock %}

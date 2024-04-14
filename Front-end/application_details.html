@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{%block title %}Applications Details{% endblock %}
+{% block content %}
+{% load static %}
+<form action="{% url 'delete_application' application.id %}" >
+    {% comment %} {% csrf_token %} {% endcomment %}
+    <button class="top-right-button" type="submit">Delete Application</button>
+ </form>
+<div class="content">
+<h1>{{ application.title }}</h1>
+
+<p>Description: {{ application.description }}</p>
+<p>Vendor Name: {{ application.vendor_name }}</p>
+<p>Software Type: {{ application.software_type }}</p>
+<p>Additional Information: {{ application.additional_information }}</p>
+<p>Comments: {{ application.comments }}</p>
+<p>Ratings: {{ application.ratings }}</p>
+<p>Vendor Company URL: {{ application.vendor_company_link }}</p>
+<p>Contact Vendor: {{ application.contact_vendor }}</p>
+<form action="{% url 'update_application' pk=application.id %}">
+    <button type="submit">Update Application</button>
+ </form>
+
+</div>
+{% endblock %}

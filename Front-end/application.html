@@ -2,36 +2,40 @@
 {%block title %}Applications{% endblock %}
 {% block content %}
 {% load static %}
-{% comment %} <form action="{% url 'addapplication' %}">
+<form action="{% url 'addapplication' %}">
   <button class="top-right-button" type="submit">Add Application</button>
-</form> {% endcomment %}
-
-<h3 align="center">Approved Applications</h3>
-{% comment %} <div class="container">
-  <div class="product-container">
-      <div class="product-item">
-         
-          <a href="">
-              <img src="{% static 'photo\images\photo.jpeg' %}" alt="Product 1">
-          </a>
-      </div>
-      <div class="product-item">
-          <a href="">
-              <img src="{% static 'photo\images\product.png' %}" alt="Product 2">
-          </a>
-      </div>
-      <div class="product-item">
-          <a href="">
-              <img src="{% static 'photo\images\freyda.png' %}" alt="Product 3">
-          </a>
-      </div>
-  </div>
-</div> {% endcomment %}
-
-<h3 align="center">Pending Applications</h3>
-
-<h3 align="center">Rejected Applications</h3>
+</form> 
+<div class="content">
+<h3>Applications</h3>
+<table>
+    <table border="1">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Software Type</th>
+            <th>Vendor Name</th>
+            <th>Vendor Company Link</th>
+            <th>Actions</th>
+            <th>Generate Report</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.title }}</td>
+            <td>{{ application.software_type }}</td>
+            <td>{{ application.vendor_name}}</td>
+            <td>{{ application.vendor_company_link }}</td>
+            <td>
+                <a href="{% url 'application_details' application.pk %}">View Application</a>
+            </td>
+            <td><a href="{% url 'generate_report' application.pk %}">View Report</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 
 </main>
+</div>
 {% endblock %}
