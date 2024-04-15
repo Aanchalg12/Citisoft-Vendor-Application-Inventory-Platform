@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Vendor Product</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Assuming the same CSS file is used -->
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images\logo.jpeg" alt="Company Logo">
+            <span></span>
+        </div>
+        <nav>
+            <button onclick="navigate('home')">Home</button>
+            <button onclick="navigate('search')">Search</button>
+            <button onclick="navigate('add')">Add New Vendor Product</button>
+            <button onclick="navigate('recent-searches')">Recent Searches</button>
+            <button onclick="navigate('recent-views')">Recent Views</button>
+        </nav>
+    </header>
+    <main>
+        <form action="#" method="POST" class="vendor-form">
+            <div class="form-content">
+                <div class="text-areas">
+                    <label for="vendor">Vendor:</label>
+                    <textarea id="vendor" name="vendor"></textarea>
+    
+                    <label for="productName">Vendor/Product Name:</label>
+                    <textarea id="productName" name="productName"></textarea>
+    
+                    <label for="category">Category:</label>
+                    <textarea id="category" name="category"></textarea>
+    
+                    <label for="website">Website:</label>
+                    <textarea id="website" name="website"></textarea>
+    
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                <div class="quick-access-buttons">
+                    <button type="button" id="recentViews" onclick="showRecentViews()">
+                        <span>Recent Views</span>
+                    </button>
+                    <button type="button" id="recentSearches" onclick="showRecentSearches()">
+                        <span>Recent Searches</span>
+                    </button>
+                </div>
+            </div>
+    
+            <div class="actions-row">
+                <label for="attachment">Attachment:</label>
+                <input type="file" id="attachment" name="attachment">
+    
+                <label for="link">Add Link:</label>
+                <input type="text" id="link" name="link">
+    
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        
+        <div class="dropdown-menu">
+            <label for="options">Select an Option:</label>
+            <select id="options" name="options">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+        </div>
+    </main>
+    
+    
+    
+    
+    <footer>
+        <p>Follow us on social media</p>
+        <!-- Social media links and other footer contents -->
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
